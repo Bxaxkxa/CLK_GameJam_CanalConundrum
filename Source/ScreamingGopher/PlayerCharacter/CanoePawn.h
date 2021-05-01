@@ -79,6 +79,11 @@ public:
 
 #pragma endregion
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Skin")
+		TArray<UMaterialInterface*> CanoeSkins;
+
+	UPROPERTY(BlueprintReadWrite, Category = "Skin")
+		int SkinIndex = 0;
 	
 
 protected:

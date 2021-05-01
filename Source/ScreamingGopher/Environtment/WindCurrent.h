@@ -42,4 +42,7 @@ public:
 
 	void ChangeWindDirection();
 
+	UFUNCTION(BlueprintCallable)
+		void StartBlowing();
+
 };

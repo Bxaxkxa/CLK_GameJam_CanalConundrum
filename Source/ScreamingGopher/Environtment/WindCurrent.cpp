@@ -19,10 +19,6 @@ void AWindMovement::BeginPlay()
 {
     Super::BeginPlay();
 
-    pPlayer = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
-
-    GetWorldTimerManager().SetTimer(ChangingWindTimer, this, &AWindMovement::ChangeWindDirection, ChangingWindDelay, false);
-
 }
 
 // Called every frame
@@ -58,6 +54,15 @@ void AWindMovement::ChangeWindDirection()
     ChangingWindDelay = float((rand() % 50) + 50) / 10.0f;
 
     //Set new timer with a new delay time
+    GetWorldTimerManager().SetTimer(ChangingWindTimer, this, &AWindMovement::ChangeWindDirection, ChangingWindDelay, false);
+}
+
+void AWindMovement::StartBlowing()
+{
+    WindDirection = FVector(-1, 0, 0);
+
+    pPlayer = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
+
     GetWorldTimerManager().SetTimer(ChangingWindTimer, this, &AWindMovement::ChangeWindDirection, ChangingWindDelay, false);
 }
 

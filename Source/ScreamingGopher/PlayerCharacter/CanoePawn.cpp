@@ -7,6 +7,7 @@
 #include "Components/SkeletalMeshComponent.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/FloatingPawnMovement.h"
+#include "Kismet/GamePlayStatic.h"
 
 // Sets default values
 ACanoePawn::ACanoePawn()
@@ -59,6 +60,8 @@ ACanoePawn::ACanoePawn()
 void ACanoePawn::BeginPlay()
 {
     Super::BeginPlay();
+
+    //GetPlayercontroller
 
 }
 
