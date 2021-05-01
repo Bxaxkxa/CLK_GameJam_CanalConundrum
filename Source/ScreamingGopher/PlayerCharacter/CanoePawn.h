@@ -6,6 +6,7 @@
 #include "GameFramework/Pawn.h"
 #include "CanoePawn.generated.h"
 
+
 UCLASS()
 class SCREAMINGGOPHER_API ACanoePawn : public APawn
 {
@@ -14,8 +15,8 @@ class SCREAMINGGOPHER_API ACanoePawn : public APawn
 public:
 	// Sets default values for this pawn's properties
 	ACanoePawn();
-	
-	UPROPERTY(EditAnywhere, Category = "Collision Component")
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Collision Component")
 		class UBoxComponent* PlayerCollision;
 
 #pragma region Mesh Component
@@ -50,6 +51,8 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Camera")
 		class UFloatingPawnMovement* PawnMovement;
 
+#pragma region Customable Variable
+
 	UPROPERTY(EditAnywhere, Category = "Paddle Power")
 		float StrongRowAngularValue;
 
@@ -74,11 +77,15 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Canoe Movement")
 		float AngularFrictionRate;
 
+#pragma endregion
+
+	
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
+public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -96,9 +103,12 @@ public:
 	void RowWeakLeft();
 
 	void MoveForward(float Value);
-	void ApplyImpulseForRotation(float Value);
+
+	UFUNCTION(BlueprintCallable)
+		void ApplyImpulseForRotation(float Value);
 
 #pragma endregion
 
 	void AngularFriction(float DeltaTime);
 };
+

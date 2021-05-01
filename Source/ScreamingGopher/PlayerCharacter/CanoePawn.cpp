@@ -17,6 +17,7 @@ ACanoePawn::ACanoePawn()
     PlayerCollision = CreateDefaultSubobject<UBoxComponent>("Box Collider");
     PlayerCollision->SetCollisionProfileName("BlockAll");
     PlayerCollision->SetSimulatePhysics(true);
+    PlayerCollision->SetEnableGravity(false);
     SetRootComponent(PlayerCollision);
 
     CanoeMesh = CreateDefaultSubobject<UStaticMeshComponent>("Canoe");
@@ -66,8 +67,8 @@ void ACanoePawn::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
 
-    AngularFriction(DeltaTime);
-    
+    //AngularFriction(DeltaTime);
+
 }
 
 // Called to bind functionality to input
@@ -132,7 +133,7 @@ void ACanoePawn::MoveForward(float Value)
     if (PawnMovement != nullptr)
     {
         //Get forward vector for the movement direction
-        const FVector Direction = GetActorRightVector();
+        const FVector Direction = GetActorForwardVector();
         AddMovementInput(Direction, Value);
     }
 }
