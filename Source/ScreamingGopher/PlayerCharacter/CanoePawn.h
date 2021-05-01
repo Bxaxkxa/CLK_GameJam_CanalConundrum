@@ -84,7 +84,32 @@ public:
 
 	UPROPERTY(BlueprintReadWrite, Category = "Skin")
 		int SkinIndex = 0;
-	
+
+	UPROPERTY(BlueprintReadWrite, Category = "State")
+		bool bGameStarted;
+
+#pragma region Animation State
+
+	UPROPERTY(BlueprintReadWrite, Category = "State")
+		bool bFirstRowAnimation;
+
+	UPROPERTY(BlueprintReadWrite, Category = "State")
+		bool bSecondRowAnimation;
+
+	UPROPERTY(BlueprintReadWrite, Category = "State")
+		bool bThirdRowAnimation;
+
+	UPROPERTY(BlueprintReadWrite, Category = "State")
+		bool bFourthRowAnimation;
+
+	UPROPERTY(BlueprintReadWrite, Category = "State")
+		bool bFifthRowAnimation;
+
+	UPROPERTY(BlueprintReadWrite, Category = "State")
+		bool bSixthRowAnimation;
+
+#pragma endregion
+
 
 protected:
 	// Called when the game starts or when spawned

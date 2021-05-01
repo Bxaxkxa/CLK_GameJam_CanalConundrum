@@ -7,7 +7,7 @@
 #include "Components/SkeletalMeshComponent.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/FloatingPawnMovement.h"
-#include "Kismet/GamePlayStatic.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 ACanoePawn::ACanoePawn()
@@ -61,8 +61,6 @@ void ACanoePawn::BeginPlay()
 {
     Super::BeginPlay();
 
-    //GetPlayercontroller
-
 }
 
 // Called every frame
@@ -70,7 +68,7 @@ void ACanoePawn::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
 
-    //AngularFriction(DeltaTime);
+    AngularFriction(DeltaTime);
 
 }
 
@@ -91,44 +89,62 @@ void ACanoePawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 
 void ACanoePawn::RowStrongRight()
 {
-    ApplyImpulseForRotation(-StrongRowAngularValue);
+    if(bGameStarted)
+    {
+        ApplyImpulseForRotation(-StrongRowAngularValue);
 
-    MoveForward(StrongRowForwardValue);
+        MoveForward(StrongRowForwardValue);
+    }
 }
 
 void ACanoePawn::RowModerateRight()
 {
-    ApplyImpulseForRotation(-ModerateRowAngularValue);
+    if (bGameStarted)
+    {
+        ApplyImpulseForRotation(-ModerateRowAngularValue);
 
-    MoveForward(ModerateRowForwardValue);
+        MoveForward(ModerateRowForwardValue);
+    }
 }
 
 void ACanoePawn::RowWeakRight()
 {
-    ApplyImpulseForRotation(-WeakRowAngularValue);
+    if (bGameStarted)
+    {
+        ApplyImpulseForRotation(-WeakRowAngularValue);
 
-    MoveForward(WeakRowForwardValue);
+        MoveForward(WeakRowForwardValue);
+    }
 }
 
 void ACanoePawn::RowStrongLeft()
 {
-    ApplyImpulseForRotation(StrongRowAngularValue);
+    if (bGameStarted)
+    {
+        ApplyImpulseForRotation(StrongRowAngularValue);
 
-    MoveForward(StrongRowForwardValue);
+        MoveForward(StrongRowForwardValue);
+    }
 }
 
 void ACanoePawn::RowModerateLeft()
 {
-    ApplyImpulseForRotation(ModerateRowAngularValue);
+    if (bGameStarted)
+    {
+        ApplyImpulseForRotation(ModerateRowAngularValue);
 
-    MoveForward(ModerateRowForwardValue);
+        MoveForward(ModerateRowForwardValue);
+    }
 }
 
 void ACanoePawn::RowWeakLeft()
 {
-    ApplyImpulseForRotation(WeakRowAngularValue);
+    if (bGameStarted)
+    {
+        ApplyImpulseForRotation(WeakRowAngularValue);
 
-    MoveForward(WeakRowForwardValue);
+        MoveForward(WeakRowForwardValue);
+    }
 }
 
 void ACanoePawn::MoveForward(float Value)
@@ -152,6 +168,7 @@ void ACanoePawn::AngularFriction(float DeltaTime)
 {
     FVector CurrentAngularVelocity = PlayerCollision->GetPhysicsAngularVelocityInDegrees();
 
+    //AngularFriction
     if (CurrentAngularVelocity.Z != 0)
     {
         CurrentAngularVelocity.Z = CurrentAngularVelocity.Z > 0 ? CurrentAngularVelocity.Z - (DeltaTime * AngularFrictionRate) : CurrentAngularVelocity.Z + (DeltaTime * AngularFrictionRate);
