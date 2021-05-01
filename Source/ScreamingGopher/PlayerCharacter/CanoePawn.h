@@ -47,6 +47,9 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Camera")
 		class UCameraComponent* FollowCamera;
 
+	UPROPERTY(EditAnywhere, Category = "Camera")
+		class UFloatingPawnMovement* PawnMovement;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -58,8 +61,12 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	void RowRight(float RowPower);
+	void RowStrongRight();
+	void RowMediumRight();
+	void RowWeakRight();
 
-	void RowLeft(float RowPower);
+	void RowStrongLeft();
+	void RowMediumLeft();
+	void RowWeakLeft();
 
 };
