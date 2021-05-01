@@ -58,6 +58,8 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	void RowRight(float Power);
+	void RowRight(float RowPower);
+
+	void RowLeft(float RowPower);
 
 };

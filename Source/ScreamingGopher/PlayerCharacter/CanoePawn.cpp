@@ -15,6 +15,7 @@ ACanoePawn::ACanoePawn()
 
 	PlayerCollision = CreateDefaultSubobject<UBoxComponent>("Box Collider");
 	PlayerCollision->SetCollisionProfileName("BlockAll");
+	PlayerCollision->SetSimulatePhysics(true);
 	SetRootComponent(PlayerCollision);
 
 	CanoeMesh = CreateDefaultSubobject<UStaticMeshComponent>("Canoe");
@@ -68,5 +69,24 @@ void ACanoePawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+	PlayerInputComponent->BindAxis("RowRight", this, &ACanoePawn::RowRight);
+	PlayerInputComponent->BindAxis("RowLeft", this, &ACanoePawn::RowLeft);
+
+}
+
+void ACanoePawn::RowRight(float RowPower)
+{
+	FVector RowDirection = FVector::CrossProduct(GetActorForwardVector(),-GetActorRightVector());
+
+	PlayerCollision->AddAngularImpulseInDegrees(RowDirection * RowPower * 150000);
+	PlayerCollision->AddImpulse(GetActorRightVector() * RowPower * 500);
+}
+
+void ACanoePawn::RowLeft(float RowPower)
+{
+	FVector RowDirection = FVector::CrossProduct(GetActorForwardVector(), GetActorRightVector());
+
+	PlayerCollision->AddAngularImpulseInDegrees(RowDirection * RowPower * 150000);
+	PlayerCollision->AddImpulse(GetActorRightVector() * RowPower * 500);
 }
 
