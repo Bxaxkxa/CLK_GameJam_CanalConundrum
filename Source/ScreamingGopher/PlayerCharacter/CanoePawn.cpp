@@ -66,18 +66,8 @@ void ACanoePawn::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
 
-    FVector CurrentAngularVelocity = PlayerCollision->GetPhysicsAngularVelocityInDegrees();
-
-    if (CurrentAngularVelocity.Z != 0)
-    {
-        CurrentAngularVelocity.Z = CurrentAngularVelocity.Z > 0 ? CurrentAngularVelocity.Z - (DeltaTime * 5) : CurrentAngularVelocity.Z + (DeltaTime * 5);
-        if (FMath::Abs(CurrentAngularVelocity.Z) < 1.0f)
-        {
-            CurrentAngularVelocity.Z = 0;
-        }
-    }
-
-    PlayerCollision->SetPhysicsAngularVelocityInDegrees(CurrentAngularVelocity);
+    AngularFriction(DeltaTime);
+    
 }
 
 // Called to bind functionality to input
@@ -86,169 +76,87 @@ void ACanoePawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
     Super::SetupPlayerInputComponent(PlayerInputComponent);
 
     PlayerInputComponent->BindAction("StrongRight", EInputEvent::IE_Pressed, this, &ACanoePawn::RowStrongRight);
-    PlayerInputComponent->BindAction("MediumRight", EInputEvent::IE_Pressed, this, &ACanoePawn::RowMediumRight);
+    PlayerInputComponent->BindAction("MediumRight", EInputEvent::IE_Pressed, this, &ACanoePawn::RowModerateRight);
     PlayerInputComponent->BindAction("LowRight", EInputEvent::IE_Pressed, this, &ACanoePawn::RowWeakRight);
 
     PlayerInputComponent->BindAction("StrongLeft", EInputEvent::IE_Pressed, this, &ACanoePawn::RowStrongLeft);
-    PlayerInputComponent->BindAction("MediumLeft", EInputEvent::IE_Pressed, this, &ACanoePawn::RowMediumLeft);
+    PlayerInputComponent->BindAction("MediumLeft", EInputEvent::IE_Pressed, this, &ACanoePawn::RowModerateLeft);
     PlayerInputComponent->BindAction("LowLeft", EInputEvent::IE_Pressed, this, &ACanoePawn::RowWeakLeft);
 
 }
 
 void ACanoePawn::RowStrongRight()
 {
-    FVector RowDirection = FVector::CrossProduct(GetActorForwardVector(), -GetActorRightVector());
+    ApplyImpulseForRotation(-StrongRowAngularValue);
 
-    PlayerCollision->AddAngularImpulseInDegrees(RowDirection * 1.0f * 3000000);
-    //AddControllerYawInput(1.0f * 100000);
-
-    if ((Controller != nullptr))
-    {
-        // find out which way is forward
-        const FRotator Rotation = Controller->GetControlRotation();
-        const FRotator YawRotation(0, Rotation.Yaw, 0);
-
-        // get forward vector
-        //const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
-        const FVector Direction = GetActorRightVector();
-        AddMovementInput(Direction, 1.0f);
-    }
-
+    MoveForward(StrongRowForwardValue);
 }
 
-void ACanoePawn::RowMediumRight()
+void ACanoePawn::RowModerateRight()
 {
-    FVector RowDirection = FVector::CrossProduct(GetActorForwardVector(), -GetActorRightVector());
+    ApplyImpulseForRotation(-ModerateRowAngularValue);
 
-    PlayerCollision->AddAngularImpulseInDegrees(RowDirection * 0.5f * 3000000);
-
-    if ((Controller != nullptr) && (0.5f != 0.0f))
-    {
-        // find out which way is forward
-        const FRotator Rotation = Controller->GetControlRotation();
-        const FRotator YawRotation(0, Rotation.Yaw, 0);
-
-        // get forward vector
-        const FVector Direction = GetActorRightVector();
-        AddMovementInput(Direction, 0.5f);
-    }
-
+    MoveForward(ModerateRowForwardValue);
 }
 
 void ACanoePawn::RowWeakRight()
 {
-    FVector RowDirection = FVector::CrossProduct(GetActorForwardVector(), -GetActorRightVector());
+    ApplyImpulseForRotation(-WeakRowAngularValue);
 
-    PlayerCollision->AddAngularImpulseInDegrees(RowDirection * 0.3f * 3000000);
-    AddControllerYawInput(1.0f * 1500);
-
-    if ((Controller != nullptr))
-    {
-        // find out which way is forward
-        const FRotator Rotation = Controller->GetControlRotation();
-        const FRotator YawRotation(0, Rotation.Yaw, 0);
-
-        // get forward vector
-        //const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
-        const FVector Direction = GetActorRightVector();
-        AddMovementInput(Direction, 0.3f);
-    }
-
+    MoveForward(WeakRowForwardValue);
 }
 
 void ACanoePawn::RowStrongLeft()
 {
-    FVector RowDirection = FVector::CrossProduct(GetActorForwardVector(), GetActorRightVector());
+    ApplyImpulseForRotation(StrongRowAngularValue);
 
-    PlayerCollision->AddAngularImpulseInDegrees(RowDirection * 1.0f * 3000000);
-    //AddControllerYawInput(-1.0f * 100000);
-    if ((Controller != nullptr))
-    {
-        // find out which way is forward
-        const FRotator Rotation = Controller->GetControlRotation();
-        const FRotator YawRotation(0, Rotation.Yaw, 0);
-
-        // get forward vector
-        //const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
-        const FVector Direction = GetActorRightVector();
-        AddMovementInput(Direction, 1.0f);
-    }
+    MoveForward(StrongRowForwardValue);
 }
 
-void ACanoePawn::RowMediumLeft()
+void ACanoePawn::RowModerateLeft()
 {
-    FVector RowDirection = FVector::CrossProduct(GetActorForwardVector(), GetActorRightVector());
+    ApplyImpulseForRotation(ModerateRowAngularValue);
 
-    PlayerCollision->AddAngularImpulseInDegrees(RowDirection * 0.5f * 3000000);
-
-    if ((Controller != nullptr))
-    {
-        // find out which way is forward
-        const FRotator Rotation = Controller->GetControlRotation();
-        const FRotator YawRotation(0, Rotation.Yaw, 0);
-
-        // get forward vector
-        //const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
-        const FVector Direction = GetActorRightVector();
-        AddMovementInput(Direction, 0.5f);
-    }
+    MoveForward(ModerateRowForwardValue);
 }
 
 void ACanoePawn::RowWeakLeft()
 {
-    FVector RowDirection = FVector::CrossProduct(GetActorForwardVector(), GetActorRightVector());
+    ApplyImpulseForRotation(WeakRowAngularValue);
 
-    PlayerCollision->AddAngularImpulseInDegrees(RowDirection * 0.3f * 3000000);
+    MoveForward(WeakRowForwardValue);
+}
 
-    if ((Controller != nullptr) && (0.3f != 0.0f))
+void ACanoePawn::MoveForward(float Value)
+{
+    if (PawnMovement != nullptr)
     {
-        // find out which way is forward
-        const FRotator Rotation = Controller->GetControlRotation();
-        const FRotator YawRotation(0, Rotation.Yaw, 0);
-
-        // get forward vector
-        //const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
+        //Get forward vector for the movement direction
         const FVector Direction = GetActorRightVector();
-        AddMovementInput(Direction, 0.3f);
+        AddMovementInput(Direction, Value);
     }
 }
 
-//void ACanoePawn::RowRight(float RowPower)
-//{
-//	FVector RowDirection = FVector::CrossProduct(GetActorForwardVector(),-GetActorRightVector());
-//
-//	PlayerCollision->AddAngularImpulseInDegrees(RowDirection * RowPower * 150000);
-//	
-//	if ((Controller != nullptr) && (RowPower != 0.0f))
-//	{
-//		// find out which way is forward
-//		const FRotator Rotation = Controller->GetControlRotation();
-//		const FRotator YawRotation(0, Rotation.Yaw, 0);
-//
-//		// get forward vector
-//		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
-//		AddMovementInput(Direction, RowPower);
-//	}
-//
-//}
-//
-//void ACanoePawn::RowLeft(float RowPower)
-//{
-//	FVector RowDirection = FVector::CrossProduct(GetActorForwardVector(), GetActorRightVector());
-//
-//	PlayerCollision->AddAngularImpulseInDegrees(RowDirection * RowPower * 150000);
-//	
-//	if ((Controller != nullptr) && (RowPower != 0.0f))
-//	{
-//		// find out which way is forward
-//		const FRotator Rotation = Controller->GetControlRotation();
-//		const FRotator YawRotation(0, Rotation.Yaw, 0);
-//
-//		// get forward vector
-//		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
-//		AddMovementInput(Direction, RowPower);
-//	}
-//
-//	//PlayerCollision->AddImpulse(GetActorRightVector() * RowPower * 500);
-//}
+void ACanoePawn::ApplyImpulseForRotation(float Value)
+{
+    FVector RowDirection = FVector::CrossProduct(GetActorForwardVector(), GetActorRightVector());
+
+    PlayerCollision->AddAngularImpulseInDegrees(RowDirection * Value * RotationSpeed);
+}
+
+void ACanoePawn::AngularFriction(float DeltaTime)
+{
+    FVector CurrentAngularVelocity = PlayerCollision->GetPhysicsAngularVelocityInDegrees();
+
+    if (CurrentAngularVelocity.Z != 0)
+    {
+        CurrentAngularVelocity.Z = CurrentAngularVelocity.Z > 0 ? CurrentAngularVelocity.Z - (DeltaTime * AngularFrictionRate) : CurrentAngularVelocity.Z + (DeltaTime * AngularFrictionRate);
+        if (FMath::Abs(CurrentAngularVelocity.Z) < 1.0f)
+        {
+            CurrentAngularVelocity.Z = 0;
+        }
+    }
+
+    PlayerCollision->SetPhysicsAngularVelocityInDegrees(CurrentAngularVelocity);
+}
 

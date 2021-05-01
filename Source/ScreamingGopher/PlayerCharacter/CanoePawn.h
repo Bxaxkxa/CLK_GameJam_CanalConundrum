@@ -14,7 +14,7 @@ class SCREAMINGGOPHER_API ACanoePawn : public APawn
 public:
 	// Sets default values for this pawn's properties
 	ACanoePawn();
-
+	
 	UPROPERTY(EditAnywhere, Category = "Collision Component")
 		class UBoxComponent* PlayerCollision;
 
@@ -50,6 +50,30 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Camera")
 		class UFloatingPawnMovement* PawnMovement;
 
+	UPROPERTY(EditAnywhere, Category = "Paddle Power")
+		float StrongRowAngularValue;
+
+	UPROPERTY(EditAnywhere, Category = "Paddle Power")
+		float ModerateRowAngularValue;
+
+	UPROPERTY(EditAnywhere, Category = "Paddle Power")
+		float WeakRowAngularValue;
+
+	UPROPERTY(EditAnywhere, Category = "Paddle Power")
+		float StrongRowForwardValue;
+
+	UPROPERTY(EditAnywhere, Category = "Paddle Power")
+		float ModerateRowForwardValue;
+
+	UPROPERTY(EditAnywhere, Category = "Paddle Power")
+		float WeakRowForwardValue;
+
+	UPROPERTY(EditAnywhere, Category = "Canoe Movement")
+		float RotationSpeed;
+
+	UPROPERTY(EditAnywhere, Category = "Canoe Movement")
+		float AngularFrictionRate;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -61,12 +85,20 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+#pragma region Movement Input
+
 	void RowStrongRight();
-	void RowMediumRight();
+	void RowModerateRight();
 	void RowWeakRight();
 
 	void RowStrongLeft();
-	void RowMediumLeft();
+	void RowModerateLeft();
 	void RowWeakLeft();
 
+	void MoveForward(float Value);
+	void ApplyImpulseForRotation(float Value);
+
+#pragma endregion
+
+	void AngularFriction(float DeltaTime);
 };
