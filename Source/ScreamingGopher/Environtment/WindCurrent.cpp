@@ -61,7 +61,7 @@ void AWindMovement::StartBlowing()
 {
     WindDirection = FVector(-1, 0, 0);
 
-    pPlayer = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
+    pPlayer = UGameplayStatics::GetPlayerPawn(Cast<UObject>(GetWorld()), 0);
 
     GetWorldTimerManager().SetTimer(ChangingWindTimer, this, &AWindMovement::ChangeWindDirection, ChangingWindDelay, false);
 }

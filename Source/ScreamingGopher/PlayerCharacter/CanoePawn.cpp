@@ -18,7 +18,7 @@ ACanoePawn::ACanoePawn()
     PlayerCollision = CreateDefaultSubobject<UBoxComponent>("Box Collider");
     PlayerCollision->SetCollisionProfileName("BlockAll");
     PlayerCollision->SetSimulatePhysics(true);
-    PlayerCollision->SetEnableGravity(false);
+    PlayerCollision->OnComponentHit.AddDynamic(this, &ACanoePawn::OnHit);
     SetRootComponent(PlayerCollision);
 
     CanoeMesh = CreateDefaultSubobject<UStaticMeshComponent>("Canoe");
@@ -61,6 +61,10 @@ void ACanoePawn::BeginPlay()
 {
     Super::BeginPlay();
 
+    PlayerCollision->OnComponentHit.AddDynamic(this, &ACanoePawn::OnHit);
+
+    
+
 }
 
 // Called every frame
@@ -89,7 +93,7 @@ void ACanoePawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 
 void ACanoePawn::RowStrongRight()
 {
-    if(bGameStarted)
+    if (bGameStarted && !bStaggered)
     {
         ApplyImpulseForRotation(-StrongRowAngularValue);
 
@@ -99,7 +103,7 @@ void ACanoePawn::RowStrongRight()
 
 void ACanoePawn::RowModerateRight()
 {
-    if (bGameStarted)
+    if (bGameStarted && !bStaggered)
     {
         ApplyImpulseForRotation(-ModerateRowAngularValue);
 
@@ -109,7 +113,7 @@ void ACanoePawn::RowModerateRight()
 
 void ACanoePawn::RowWeakRight()
 {
-    if (bGameStarted)
+    if (bGameStarted && !bStaggered)
     {
         ApplyImpulseForRotation(-WeakRowAngularValue);
 
@@ -119,7 +123,7 @@ void ACanoePawn::RowWeakRight()
 
 void ACanoePawn::RowStrongLeft()
 {
-    if (bGameStarted)
+    if (bGameStarted && !bStaggered)
     {
         ApplyImpulseForRotation(StrongRowAngularValue);
 
@@ -129,7 +133,7 @@ void ACanoePawn::RowStrongLeft()
 
 void ACanoePawn::RowModerateLeft()
 {
-    if (bGameStarted)
+    if (bGameStarted && !bStaggered)
     {
         ApplyImpulseForRotation(ModerateRowAngularValue);
 
@@ -139,7 +143,7 @@ void ACanoePawn::RowModerateLeft()
 
 void ACanoePawn::RowWeakLeft()
 {
-    if (bGameStarted)
+    if (bGameStarted && !bStaggered)
     {
         ApplyImpulseForRotation(WeakRowAngularValue);
 
@@ -179,5 +183,15 @@ void ACanoePawn::AngularFriction(float DeltaTime)
     }
 
     PlayerCollision->SetPhysicsAngularVelocityInDegrees(CurrentAngularVelocity);
+}
+
+void ACanoePawn::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+{
+    FVector PlayerVelocity = GetMovementComponent()->Velocity;
+
+    if (PlayerVelocity.X > 250 || PlayerVelocity.Y > 250)
+    {
+        //bStaggered = true;
+    }
 }
 

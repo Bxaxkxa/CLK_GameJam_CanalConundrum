@@ -108,6 +108,9 @@ public:
 	UPROPERTY(BlueprintReadWrite, Category = "State")
 		bool bSixthRowAnimation;
 
+	UPROPERTY(BlueprintReadWrite, Category = "State")
+		bool bStaggered = false;
+
 #pragma endregion
 
 
@@ -140,5 +143,8 @@ public:
 #pragma endregion
 
 	void AngularFriction(float DeltaTime);
+
+	UFUNCTION()
+		virtual void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 };
 
