@@ -269,7 +269,7 @@ void ACanoePawn::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimit
 
     if (PlayerVelocity.X > 250 || PlayerVelocity.Y > 250)
     {
-        //bStaggered = true;
+        bStaggered = true;
     }
 }
 
