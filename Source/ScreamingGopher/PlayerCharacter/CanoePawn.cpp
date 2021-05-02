@@ -61,10 +61,6 @@ void ACanoePawn::BeginPlay()
 {
     Super::BeginPlay();
 
-    PlayerCollision->OnComponentHit.AddDynamic(this, &ACanoePawn::OnHit);
-
-    
-
 }
 
 // Called every frame
