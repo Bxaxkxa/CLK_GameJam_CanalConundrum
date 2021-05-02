@@ -20,6 +20,25 @@ void UHiscore::fetchHiscores()
 	HttpRequest->ProcessRequest();
 }
 
+void UHiscore::uploadHiscore(FString name, int time)
+{
+	FString JsonString;
+	TSharedRef<TJsonWriter<TCHAR>> JsonWriter = TJsonWriterFactory<TCHAR>::Create(&JsonString);
+	JsonWriter->WriteObjectStart();
+	JsonWriter->WriteValue("name", name);
+	JsonWriter->WriteValue("time", time);
+	JsonWriter->WriteObjectEnd();
+	JsonWriter->Close();
+
+	TSharedRef<IHttpRequest> HttpRequest = FHttpModule::Get().CreateRequest();
+	HttpRequest->SetVerb("POST");
+	HttpRequest->SetHeader("Content-Type", "multipart/form-data");
+	HttpRequest->SetURL("https://clkjam.uc.r.appspot.com/hiscores");
+	HttpRequest->SetContentAsString(JsonString);
+	HttpRequest->OnProcessRequestComplete().BindUObject(this, &UHiscore::OnPostResponseReceived);
+	HttpRequest->ProcessRequest();
+}
+
 void UHiscore::OnGetResponseReceived(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bWasSuccessful)
 {
 	if (bWasSuccessful && Response->GetContentType() == "application/json")
@@ -44,6 +63,21 @@ void UHiscore::OnGetResponseReceived(FHttpRequestPtr Request, FHttpResponsePtr R
 	}
 
 	OnHiscoresReady.Broadcast();
+}
+
+void UHiscore::OnPostResponseReceived(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bWasSuccessful)
+{
+	if (bWasSuccessful)
+	{
+		// TODO something useful
+	}
+	else 
+	{
+		// TODO something useful
+	}
+
+	OnHiscoreUploaded.Broadcast();
+
 }
 
 TArray<FString> UHiscore::getHiscoreNames()
