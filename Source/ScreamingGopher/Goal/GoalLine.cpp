@@ -2,6 +2,7 @@
 
 
 #include "GoalLine.h"
+#include "../Hiscore.h"
 #include "Components/BoxComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "../PlayerCharacter/CanoePawn.h"
@@ -44,6 +45,18 @@ void AGoalLine::OverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherA
         if (CanoePlayer)
         {
             CanoePlayer->bGameStarted = false;
+
+            int MinuteToSecond = CanoePlayer->Minute * 60;
+            int HourToSecond = CanoePlayer->Hour * 360;
+
+            int EndScore = MinuteToSecond + HourToSecond + CanoePlayer->Second;
+
+            UHiscore* GameInstance = Cast<UHiscore>(GetGameInstance());
+            if (GameInstance)
+            {
+                GameInstance->uploadHiscore("Bob", EndScore);
+                GameInstance->OnHiscoreUploaded.Broadcast();
+            }
         }
     }
 }

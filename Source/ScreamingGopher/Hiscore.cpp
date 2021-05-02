@@ -8,9 +8,9 @@
 
 void UHiscore::fetchHiscores()
 {
-	if (cachedScores.Num() > 0) {
+	/*if (cachedScores.Num() > 0) {
 		return;
-	}
+	}*/
 
 	TSharedRef<IHttpRequest> HttpRequest = FHttpModule::Get().CreateRequest();
 	HttpRequest->SetVerb("GET");
@@ -32,7 +32,8 @@ void UHiscore::uploadHiscore(FString name, int time)
 
 	TSharedRef<IHttpRequest> HttpRequest = FHttpModule::Get().CreateRequest();
 	HttpRequest->SetVerb("POST");
-	HttpRequest->SetHeader("Content-Type", "multipart/form-data");
+	//HttpRequest->SetHeader("Content-Type", "multipart/form-data");
+	HttpRequest->SetHeader("Content-Type", "application/json");
 	HttpRequest->SetURL("https://clkjam.uc.r.appspot.com/hiscores");
 	HttpRequest->SetContentAsString(JsonString);
 	HttpRequest->OnProcessRequestComplete().BindUObject(this, &UHiscore::OnPostResponseReceived);
