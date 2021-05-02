@@ -10,6 +10,7 @@
 #include "Hiscore.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnHiscoresReady);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnHiscoreUploaded);
 
 struct Hiscore
 {
@@ -29,6 +30,9 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FOnHiscoresReady OnHiscoresReady;
 
+	UPROPERTY(BlueprintAssignable)
+	FOnHiscoreUploaded OnHiscoreUploaded;
+
 	UFUNCTION(BlueprintCallable)
 	void fetchHiscores();
 
@@ -38,7 +42,11 @@ public:
 	UFUNCTION(BlueprintCallable)
 	TArray<int> getHiscoreTimes();
 
+	UFUNCTION(BlueprintCallable)
+	void uploadHiscore(FString name, int time);
+
 	void OnGetResponseReceived(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bWasSuccessful);
+	void OnPostResponseReceived(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bWasSuccessful);
 
 private:
 	TArray<Hiscore> cachedScores;
