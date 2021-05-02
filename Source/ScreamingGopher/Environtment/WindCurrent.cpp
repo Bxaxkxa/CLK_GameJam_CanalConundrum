@@ -4,7 +4,10 @@
 #include "WindCurrent.h"
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/PawnMovementComponent.h"
-
+#include "TimerManager.h"
+#include "Components/PrimitiveComponent.h"
+#include "GameFramework/Pawn.h"
+#include "Engine/World.h"
 
 // Sets default values
 AWindMovement::AWindMovement()
