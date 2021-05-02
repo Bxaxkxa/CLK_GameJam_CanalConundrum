@@ -25,22 +25,22 @@ public:
 		class UStaticMeshComponent* CanoeMesh;
 
 	//Six Racer Mesh
-	UPROPERTY(EditAnywhere, Category = "Racers")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Racers")
 		class USkeletalMeshComponent* FirstRowRacer;
 
-	UPROPERTY(EditAnywhere, Category = "Racers")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Racers")
 		class USkeletalMeshComponent* SecondRowRacer;
 
-	UPROPERTY(EditAnywhere, Category = "Racers")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Racers")
 		class USkeletalMeshComponent* ThirdRowRacer;
 
-	UPROPERTY(EditAnywhere, Category = "Racers")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Racers")
 		class USkeletalMeshComponent* FourthRowRacer;
 
-	UPROPERTY(EditAnywhere, Category = "Racers")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Racers")
 		class USkeletalMeshComponent* FifthRowRacer;
 
-	UPROPERTY(EditAnywhere, Category = "Racers")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Racers")
 		class USkeletalMeshComponent* SixthRowRacer;
 
 #pragma endregion
@@ -91,25 +91,32 @@ public:
 #pragma region Animation State
 
 	UPROPERTY(BlueprintReadWrite, Category = "State")
-		bool bFirstRowAnimation;
+		bool bFirstRowAnimation = false;
+	float fFirstRowAnimTime = 0;
 
 	UPROPERTY(BlueprintReadWrite, Category = "State")
-		bool bSecondRowAnimation;
+		bool bSecondRowAnimation = false;
+	float fSecondRowAnimTime = 0;
 
 	UPROPERTY(BlueprintReadWrite, Category = "State")
-		bool bThirdRowAnimation;
+		bool bThirdRowAnimation = false;
+	float fThirdRowAnimTime = 0;
 
 	UPROPERTY(BlueprintReadWrite, Category = "State")
-		bool bFourthRowAnimation;
+		bool bFourthRowAnimation = false;
+	float fFourthRowAnimTime = 0;
 
 	UPROPERTY(BlueprintReadWrite, Category = "State")
-		bool bFifthRowAnimation;
+		bool bFifthRowAnimation = false;
+	float fFifthRowAnimTime = 0;
 
 	UPROPERTY(BlueprintReadWrite, Category = "State")
-		bool bSixthRowAnimation;
+		bool bSixthRowAnimation = false;
+	float fSixthRowAnimTime = 0;
 
 	UPROPERTY(BlueprintReadWrite, Category = "State")
 		bool bStaggered = false;
+	float fStaggeredAnimTime = 0;
 
 #pragma endregion
 
@@ -143,6 +150,7 @@ public:
 #pragma endregion
 
 	void AngularFriction(float DeltaTime);
+	void UpdateAnimations(float DeltaTime);
 
 	UFUNCTION(BlueprintCallable)
 		virtual void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
