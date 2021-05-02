@@ -4,6 +4,7 @@
 #include "PaddleBoat.h"
 #include "Components/BoxComponent.h"
 #include "Components/SkeletalMeshComponent.h"
+#include "Engine/TargetPoint.h"
 
 // Sets default values
 APaddleBoat::APaddleBoat()
@@ -32,6 +33,16 @@ void APaddleBoat::BeginPlay()
     if (FirstTarget)
     {
         CurrentTarget = FirstTarget;
+
+        FVector TargetLocation = CurrentTarget->GetActorLocation();
+
+        FVector ActorLocation = this->GetActorLocation();
+
+        FVector Direction = TargetLocation - ActorLocation;
+
+        FRotator FacingDirection = Direction.Rotation();
+
+        SetActorRotation(FacingDirection);
     }
 }
 
@@ -40,5 +51,40 @@ void APaddleBoat::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
 
+    MoveToTarget();
+}
+
+void APaddleBoat::MoveToTarget()
+{
+    FVector TargetLocation = CurrentTarget->GetActorLocation();
+
+    FVector ActorLocation = this->GetActorLocation();
+
+    FVector Direction =  TargetLocation - ActorLocation;
+    Direction.Normalize();
+    FVector MovementGoal = ActorLocation + (Direction * Speed);
+
+    SetActorLocation(MovementGoal);
+
+    if (FVector::Dist(ActorLocation, TargetLocation) < 20)
+    {
+        ChangeTarget();
+    }
+
+}
+
+void APaddleBoat::ChangeTarget()
+{
+    CurrentTarget = CurrentTarget == FirstTarget ? SecondTarget : FirstTarget;
+
+    FVector TargetLocation = CurrentTarget->GetActorLocation();
+
+    FVector ActorLocation = this->GetActorLocation();
+
+    FVector Direction = TargetLocation - ActorLocation;
+
+    FRotator FacingDirection = Direction.Rotation();
+
+    SetActorRotation(FacingDirection);
 }
 

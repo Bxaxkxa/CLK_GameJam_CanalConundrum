@@ -30,6 +30,9 @@ public:
 	UPROPERTY(EditAnywhere, Category = "DestinationPoint")
 		class ATargetPoint* SecondTarget;
 
+	UPROPERTY(EditAnywhere, Category = "Speed")
+		float Speed;
+
 	ATargetPoint* CurrentTarget;
 
 protected:
@@ -40,4 +43,6 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	void MoveToTarget();
+	void ChangeTarget();
 };

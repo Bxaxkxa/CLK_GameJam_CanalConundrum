@@ -91,7 +91,7 @@ void ACanoePawn::RowStrongRight()
 {
     if (bGameStarted && !bStaggered)
     {
-        ApplyImpulseForRotation(-StrongRowAngularValue);
+        ApplyImpulseForRotation(StrongRowAngularValue);
 
         MoveForward(StrongRowForwardValue);
     }
@@ -101,7 +101,7 @@ void ACanoePawn::RowModerateRight()
 {
     if (bGameStarted && !bStaggered)
     {
-        ApplyImpulseForRotation(-ModerateRowAngularValue);
+        ApplyImpulseForRotation(ModerateRowAngularValue);
 
         MoveForward(ModerateRowForwardValue);
     }
@@ -111,7 +111,7 @@ void ACanoePawn::RowWeakRight()
 {
     if (bGameStarted && !bStaggered)
     {
-        ApplyImpulseForRotation(-WeakRowAngularValue);
+        ApplyImpulseForRotation(WeakRowAngularValue);
 
         MoveForward(WeakRowForwardValue);
     }
@@ -121,7 +121,7 @@ void ACanoePawn::RowStrongLeft()
 {
     if (bGameStarted && !bStaggered)
     {
-        ApplyImpulseForRotation(StrongRowAngularValue);
+        ApplyImpulseForRotation(-StrongRowAngularValue);
 
         MoveForward(StrongRowForwardValue);
     }
@@ -131,7 +131,7 @@ void ACanoePawn::RowModerateLeft()
 {
     if (bGameStarted && !bStaggered)
     {
-        ApplyImpulseForRotation(ModerateRowAngularValue);
+        ApplyImpulseForRotation(-ModerateRowAngularValue);
 
         MoveForward(ModerateRowForwardValue);
     }
@@ -141,7 +141,7 @@ void ACanoePawn::RowWeakLeft()
 {
     if (bGameStarted && !bStaggered)
     {
-        ApplyImpulseForRotation(WeakRowAngularValue);
+        ApplyImpulseForRotation(-WeakRowAngularValue);
 
         MoveForward(WeakRowForwardValue);
     }
