@@ -71,8 +71,13 @@ void ACanoePawn::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
 
-	UpdateAnimations(DeltaTime);
+    UpdateAnimations(DeltaTime);
     AngularFriction(DeltaTime);
+
+    if (bGameStarted)
+    {
+        HandleTimer();
+    }
 
 }
 
@@ -93,45 +98,9 @@ void ACanoePawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 
 void ACanoePawn::RowStrongRight()
 {
-    if (bGameStarted && !bStaggered && !bFirstRowAnimation)
-    {
-		bFirstRowAnimation = true;
-
-        ApplyImpulseForRotation(-StrongRowAngularValue);
-
-        MoveForward(StrongRowForwardValue);
-    }
-}
-
-void ACanoePawn::RowModerateRight()
-{
-    if (bGameStarted && !bStaggered && !bThirdRowAnimation)
-    {
-		bThirdRowAnimation = true;
-
-        ApplyImpulseForRotation(-ModerateRowAngularValue);
-
-        MoveForward(ModerateRowForwardValue);
-    }
-}
-
-void ACanoePawn::RowWeakRight()
-{
-    if (bGameStarted && !bStaggered && !bFifthRowAnimation)
-    {
-		bFifthRowAnimation = true;
-
-        ApplyImpulseForRotation(-WeakRowAngularValue);
-
-        MoveForward(WeakRowForwardValue);
-    }
-}
-
-void ACanoePawn::RowStrongLeft()
-{
     if (bGameStarted && !bStaggered && !bSecondRowAnimation)
     {
-		bSecondRowAnimation = true;
+        bSecondRowAnimation = true;
 
         ApplyImpulseForRotation(StrongRowAngularValue);
 
@@ -139,11 +108,11 @@ void ACanoePawn::RowStrongLeft()
     }
 }
 
-void ACanoePawn::RowModerateLeft()
+void ACanoePawn::RowModerateRight()
 {
     if (bGameStarted && !bStaggered && !bFourthRowAnimation)
     {
-		bFourthRowAnimation = true;
+        bFourthRowAnimation = true;
 
         ApplyImpulseForRotation(ModerateRowAngularValue);
 
@@ -151,13 +120,49 @@ void ACanoePawn::RowModerateLeft()
     }
 }
 
-void ACanoePawn::RowWeakLeft()
+void ACanoePawn::RowWeakRight()
 {
     if (bGameStarted && !bStaggered && !bSixthRowAnimation)
     {
-		bSixthRowAnimation = true;
+        bSixthRowAnimation = true;
 
         ApplyImpulseForRotation(WeakRowAngularValue);
+
+        MoveForward(WeakRowForwardValue);
+    }
+}
+
+void ACanoePawn::RowStrongLeft()
+{
+    if (bGameStarted && !bStaggered && !bFirstRowAnimation)
+    {
+        bFirstRowAnimation = true;
+
+        ApplyImpulseForRotation(-StrongRowAngularValue);
+
+        MoveForward(StrongRowForwardValue);
+    }
+}
+
+void ACanoePawn::RowModerateLeft()
+{
+    if (bGameStarted && !bStaggered && !bThirdRowAnimation)
+    {
+        bThirdRowAnimation = true;
+
+        ApplyImpulseForRotation(-ModerateRowAngularValue);
+
+        MoveForward(ModerateRowForwardValue);
+    }
+}
+
+void ACanoePawn::RowWeakLeft()
+{
+    if (bGameStarted && !bStaggered && !bFifthRowAnimation)
+    {
+        bFifthRowAnimation = true;
+
+        ApplyImpulseForRotation(-WeakRowAngularValue);
 
         MoveForward(WeakRowForwardValue);
     }
@@ -199,68 +204,68 @@ void ACanoePawn::AngularFriction(float DeltaTime)
 
 void ACanoePawn::UpdateAnimations(float DeltaTime)
 {
-	if (bFirstRowAnimation) {
-		fFirstRowAnimTime += DeltaTime;
-		if (fFirstRowAnimTime >= PADDLE_ANIM_TIME)
-		{
-			fFirstRowAnimTime = 0;
-			bFirstRowAnimation = false;
-		}
-	}
+    if (bFirstRowAnimation) {
+        fFirstRowAnimTime += DeltaTime;
+        if (fFirstRowAnimTime >= PADDLE_ANIM_TIME)
+        {
+            fFirstRowAnimTime = 0;
+            bFirstRowAnimation = false;
+        }
+    }
 
-	if (bSecondRowAnimation) {
-		fSecondRowAnimTime += DeltaTime;
-		if (fSecondRowAnimTime >= PADDLE_ANIM_TIME)
-		{
-			fSecondRowAnimTime = 0;
-			bSecondRowAnimation = false;
-		}
-	}
+    if (bSecondRowAnimation) {
+        fSecondRowAnimTime += DeltaTime;
+        if (fSecondRowAnimTime >= PADDLE_ANIM_TIME)
+        {
+            fSecondRowAnimTime = 0;
+            bSecondRowAnimation = false;
+        }
+    }
 
-	if (bThirdRowAnimation) {
-		fThirdRowAnimTime += DeltaTime;
-		if (fThirdRowAnimTime >= PADDLE_ANIM_TIME)
-		{
-			fThirdRowAnimTime = 0;
-			bThirdRowAnimation = false;
-		}
-	}
+    if (bThirdRowAnimation) {
+        fThirdRowAnimTime += DeltaTime;
+        if (fThirdRowAnimTime >= PADDLE_ANIM_TIME)
+        {
+            fThirdRowAnimTime = 0;
+            bThirdRowAnimation = false;
+        }
+    }
 
-	if (bFourthRowAnimation) {
-		fFourthRowAnimTime += DeltaTime;
-		if (fFourthRowAnimTime >= PADDLE_ANIM_TIME)
-		{
-			fFourthRowAnimTime = 0;
-			bFourthRowAnimation = false;
-		}
-	}
+    if (bFourthRowAnimation) {
+        fFourthRowAnimTime += DeltaTime;
+        if (fFourthRowAnimTime >= PADDLE_ANIM_TIME)
+        {
+            fFourthRowAnimTime = 0;
+            bFourthRowAnimation = false;
+        }
+    }
 
-	if (bFifthRowAnimation) {
-		fFifthRowAnimTime += DeltaTime;
-		if (fFifthRowAnimTime >= PADDLE_ANIM_TIME)
-		{
-			fFifthRowAnimTime = 0;
-			bFifthRowAnimation = false;
-		}
-	}
+    if (bFifthRowAnimation) {
+        fFifthRowAnimTime += DeltaTime;
+        if (fFifthRowAnimTime >= PADDLE_ANIM_TIME)
+        {
+            fFifthRowAnimTime = 0;
+            bFifthRowAnimation = false;
+        }
+    }
 
-	if (bSixthRowAnimation) {
-		fSixthRowAnimTime += DeltaTime;
-		if (fSixthRowAnimTime >= PADDLE_ANIM_TIME)
-		{
-			fSixthRowAnimTime = 0;
-			bSixthRowAnimation = false;
-		}
-	}
+    if (bSixthRowAnimation) {
+        fSixthRowAnimTime += DeltaTime;
+        if (fSixthRowAnimTime >= PADDLE_ANIM_TIME)
+        {
+            fSixthRowAnimTime = 0;
+            bSixthRowAnimation = false;
+        }
+    }
 
-	if (bStaggered) {
-		fStaggeredAnimTime += DeltaTime;
-		if (fStaggeredAnimTime >= STAGGER_ANIM_TIME)
-		{
-			fStaggeredAnimTime = 0;
-			bStaggered = false;
-		}
-	}
+    if (bStaggered) {
+        fStaggeredAnimTime += DeltaTime;
+        if (fStaggeredAnimTime >= STAGGER_ANIM_TIME)
+        {
+            fStaggeredAnimTime = 0;
+            bStaggered = false;
+        }
+    }
 }
 
 void ACanoePawn::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
@@ -271,5 +276,41 @@ void ACanoePawn::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimit
     {
         bStaggered = true;
     }
+}
+
+void ACanoePawn::HandleTimer()
+{
+    MiliSecond++;
+
+    if (MiliSecond >= 60)
+    {
+        AddSecond();
+    }
+}
+
+void ACanoePawn::AddSecond()
+{
+    MiliSecond = 0;
+    Second++;
+    if (MiliSecond >= 60)
+    {
+        AddSecond();
+    }
+}
+
+void ACanoePawn::AddMinute()
+{
+    Second = 0;
+    Minute++;
+    if (Second >= 60)
+    {
+        AddHour();
+    }
+}
+
+void ACanoePawn::AddHour()
+{
+    Minute = 0;
+    Hour++;
 }
 

@@ -120,6 +120,16 @@ public:
 
 #pragma endregion
 
+#pragma region Timer
+	UPROPERTY(BlueprintReadOnly)
+		int MiliSecond = 0;
+	UPROPERTY(BlueprintReadOnly)
+		int Second = 0;
+	UPROPERTY(BlueprintReadOnly)
+		int Minute = 0;
+	UPROPERTY(BlueprintReadOnly)
+		int Hour = 0;
+#pragma endregion
 
 protected:
 	// Called when the game starts or when spawned
@@ -154,5 +164,11 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 		virtual void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+
+	void HandleTimer();
+
+	void AddSecond();
+	void AddMinute();
+	void AddHour();
 };
 

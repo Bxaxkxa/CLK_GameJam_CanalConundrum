@@ -4,6 +4,8 @@
 #include "GoalLine.h"
 #include "Components/BoxComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "../PlayerCharacter/CanoePawn.h"
+
 
 // Sets default values
 AGoalLine::AGoalLine()
@@ -38,7 +40,11 @@ void AGoalLine::OverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherA
     APawn* Player = Cast<APawn>(OtherActor);
     if (Player)
     {
-        UGameplayStatics::OpenLevel(GetWorld(), "TestingLevel");
+        ACanoePawn* CanoePlayer = Cast<ACanoePawn>(Player);
+        if (CanoePlayer)
+        {
+            CanoePlayer->bGameStarted = false;
+        }
     }
 }
 
