@@ -9,6 +9,9 @@
 #include "GameFramework/FloatingPawnMovement.h"
 #include "Kismet/GameplayStatics.h"
 
+const float STAGGER_ANIM_TIME = 2.0f;
+const float PADDLE_ANIM_TIME = 2.0f;
+
 // Sets default values
 ACanoePawn::ACanoePawn()
 {
@@ -68,6 +71,7 @@ void ACanoePawn::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
 
+	UpdateAnimations(DeltaTime);
     AngularFriction(DeltaTime);
 
 }
@@ -89,8 +93,10 @@ void ACanoePawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 
 void ACanoePawn::RowStrongRight()
 {
-    if (bGameStarted && !bStaggered)
+    if (bGameStarted && !bStaggered && !bFirstRowAnimation)
     {
+		bFirstRowAnimation = true;
+
         ApplyImpulseForRotation(-StrongRowAngularValue);
 
         MoveForward(StrongRowForwardValue);
@@ -99,8 +105,10 @@ void ACanoePawn::RowStrongRight()
 
 void ACanoePawn::RowModerateRight()
 {
-    if (bGameStarted && !bStaggered)
+    if (bGameStarted && !bStaggered && !bThirdRowAnimation)
     {
+		bThirdRowAnimation = true;
+
         ApplyImpulseForRotation(-ModerateRowAngularValue);
 
         MoveForward(ModerateRowForwardValue);
@@ -109,8 +117,10 @@ void ACanoePawn::RowModerateRight()
 
 void ACanoePawn::RowWeakRight()
 {
-    if (bGameStarted && !bStaggered)
+    if (bGameStarted && !bStaggered && !bFifthRowAnimation)
     {
+		bFifthRowAnimation = true;
+
         ApplyImpulseForRotation(-WeakRowAngularValue);
 
         MoveForward(WeakRowForwardValue);
@@ -119,8 +129,10 @@ void ACanoePawn::RowWeakRight()
 
 void ACanoePawn::RowStrongLeft()
 {
-    if (bGameStarted && !bStaggered)
+    if (bGameStarted && !bStaggered && !bSecondRowAnimation)
     {
+		bSecondRowAnimation = true;
+
         ApplyImpulseForRotation(StrongRowAngularValue);
 
         MoveForward(StrongRowForwardValue);
@@ -129,8 +141,10 @@ void ACanoePawn::RowStrongLeft()
 
 void ACanoePawn::RowModerateLeft()
 {
-    if (bGameStarted && !bStaggered)
+    if (bGameStarted && !bStaggered && !bFourthRowAnimation)
     {
+		bFourthRowAnimation = true;
+
         ApplyImpulseForRotation(ModerateRowAngularValue);
 
         MoveForward(ModerateRowForwardValue);
@@ -139,8 +153,10 @@ void ACanoePawn::RowModerateLeft()
 
 void ACanoePawn::RowWeakLeft()
 {
-    if (bGameStarted && !bStaggered)
+    if (bGameStarted && !bStaggered && !bSixthRowAnimation)
     {
+		bSixthRowAnimation = true;
+
         ApplyImpulseForRotation(WeakRowAngularValue);
 
         MoveForward(WeakRowForwardValue);
@@ -179,6 +195,72 @@ void ACanoePawn::AngularFriction(float DeltaTime)
     }
 
     PlayerCollision->SetPhysicsAngularVelocityInDegrees(CurrentAngularVelocity);
+}
+
+void ACanoePawn::UpdateAnimations(float DeltaTime)
+{
+	if (bFirstRowAnimation) {
+		fFirstRowAnimTime += DeltaTime;
+		if (fFirstRowAnimTime >= PADDLE_ANIM_TIME)
+		{
+			fFirstRowAnimTime = 0;
+			bFirstRowAnimation = false;
+		}
+	}
+
+	if (bSecondRowAnimation) {
+		fSecondRowAnimTime += DeltaTime;
+		if (fSecondRowAnimTime >= PADDLE_ANIM_TIME)
+		{
+			fSecondRowAnimTime = 0;
+			bSecondRowAnimation = false;
+		}
+	}
+
+	if (bThirdRowAnimation) {
+		fThirdRowAnimTime += DeltaTime;
+		if (fThirdRowAnimTime >= PADDLE_ANIM_TIME)
+		{
+			fThirdRowAnimTime = 0;
+			bThirdRowAnimation = false;
+		}
+	}
+
+	if (bFourthRowAnimation) {
+		fFourthRowAnimTime += DeltaTime;
+		if (fFourthRowAnimTime >= PADDLE_ANIM_TIME)
+		{
+			fFourthRowAnimTime = 0;
+			bFourthRowAnimation = false;
+		}
+	}
+
+	if (bFifthRowAnimation) {
+		fFifthRowAnimTime += DeltaTime;
+		if (fFifthRowAnimTime >= PADDLE_ANIM_TIME)
+		{
+			fFifthRowAnimTime = 0;
+			bFifthRowAnimation = false;
+		}
+	}
+
+	if (bSixthRowAnimation) {
+		fSixthRowAnimTime += DeltaTime;
+		if (fSixthRowAnimTime >= PADDLE_ANIM_TIME)
+		{
+			fSixthRowAnimTime = 0;
+			bSixthRowAnimation = false;
+		}
+	}
+
+	if (bStaggered) {
+		fStaggeredAnimTime += DeltaTime;
+		if (fStaggeredAnimTime >= STAGGER_ANIM_TIME)
+		{
+			fStaggeredAnimTime = 0;
+			bStaggered = false;
+		}
+	}
 }
 
 void ACanoePawn::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
