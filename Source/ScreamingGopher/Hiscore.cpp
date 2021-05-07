@@ -5,13 +5,10 @@
 #include "Serialization/JsonReader.h"
 #include "Serialization/JsonSerializer.h"
 #include "Interfaces/IHttpResponse.h"
+#include "picosha2.h"
 
 void UHiscore::fetchHiscores()
 {
-	/*if (cachedScores.Num() > 0) {
-		return;
-	}*/
-
 	TSharedRef<IHttpRequest> HttpRequest = FHttpModule::Get().CreateRequest();
 	HttpRequest->SetVerb("GET");
 	HttpRequest->SetHeader("Content-Type", "application/json");
@@ -22,17 +19,22 @@ void UHiscore::fetchHiscores()
 
 void UHiscore::uploadHiscore(FString name, int time)
 {
+	FString hashInputF = name + "," + FString::FromInt(time) + ",this_is_a_magic_string5828177577217725";
+	std::string hashInputStr = TCHAR_TO_UTF8(&hashInputF);
+	std::string hash_hex_str;
+	picosha2::hash256_hex_string(hashInputStr, hash_hex_str);
+	FString hash_hex_fstr = FString::FromBlob((const uint8*)hash_hex_str.c_str(), hash_hex_str.size());
+
+	TSharedPtr<FJsonObject> JsonObject = MakeShareable(new FJsonObject());
+	JsonObject->SetStringField(TEXT("name"), *FString::Printf(TEXT("%s"), *name));
+	JsonObject->SetNumberField(TEXT("time"), time);
+	JsonObject->SetStringField(TEXT("magic"), *FString::Printf(TEXT("%s"), *hash_hex_fstr));
 	FString JsonString;
-	TSharedRef<TJsonWriter<TCHAR>> JsonWriter = TJsonWriterFactory<TCHAR>::Create(&JsonString);
-	JsonWriter->WriteObjectStart();
-	JsonWriter->WriteValue("name", name);
-	JsonWriter->WriteValue("time", time);
-	JsonWriter->WriteObjectEnd();
-	JsonWriter->Close();
+	TSharedRef<TJsonWriter<TCHAR>> JsonWriter = TJsonWriterFactory<>::Create(&JsonString);
+	FJsonSerializer::Serialize(JsonObject.ToSharedRef(), JsonWriter);
 
 	TSharedRef<IHttpRequest> HttpRequest = FHttpModule::Get().CreateRequest();
 	HttpRequest->SetVerb("POST");
-	//HttpRequest->SetHeader("Content-Type", "multipart/form-data");
 	HttpRequest->SetHeader("Content-Type", "application/json");
 	HttpRequest->SetURL("https://clkjam.uc.r.appspot.com/hiscores");
 	HttpRequest->SetContentAsString(JsonString);
