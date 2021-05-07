@@ -122,9 +122,9 @@ public:
 
 #pragma region Timer
 	UPROPERTY(BlueprintReadOnly)
-		int MiliSecond = 0;
+		float MiliSecond = 0;
 	UPROPERTY(BlueprintReadOnly)
-		int Second = 0;
+		float Second = 0;
 	UPROPERTY(BlueprintReadOnly)
 		int Minute = 0;
 	UPROPERTY(BlueprintReadOnly)
@@ -165,7 +165,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 		virtual void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 
-	void HandleTimer();
+	void HandleTimer(float DeltaTime);
 
 	void AddSecond();
 	void AddMinute();

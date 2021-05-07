@@ -76,7 +76,7 @@ void ACanoePawn::Tick(float DeltaTime)
 
     if (bGameStarted)
     {
-        HandleTimer();
+        HandleTimer(DeltaTime);
     }
 
 }
@@ -175,6 +175,7 @@ void ACanoePawn::MoveForward(float Value)
         //Get forward vector for the movement direction
         const FVector Direction = GetActorForwardVector();
         AddMovementInput(Direction, Value);
+        
     }
 }
 
@@ -278,31 +279,38 @@ void ACanoePawn::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimit
     }
 }
 
-void ACanoePawn::HandleTimer()
+void ACanoePawn::HandleTimer(float DeltaTime)
 {
-    MiliSecond++;
+    //MiliSecond += DeltaTime;
+    ////MiliSecond += 1;
 
-    if (MiliSecond >= 60)
+    //if (MiliSecond >= 60)
+    //{
+    //    AddSecond();
+    //}
+
+    Second += DeltaTime;
+    if (Second >= 60)
     {
-        AddSecond();
+        AddMinute();
     }
 }
 
 void ACanoePawn::AddSecond()
 {
-    MiliSecond = 0;
+    /*MiliSecond = 0;
     Second++;
-    if (MiliSecond >= 60)
+    if (Second >= 60)
     {
-        AddSecond();
-    }
+        AddMinute();
+    }*/
 }
 
 void ACanoePawn::AddMinute()
 {
     Second = 0;
     Minute++;
-    if (Second >= 60)
+    if (Minute >= 60)
     {
         AddHour();
     }
